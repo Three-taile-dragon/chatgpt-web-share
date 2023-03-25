@@ -26,6 +26,16 @@ RUN apk add --no-cache docker-compose
 COPY backend /app/backend
 COPY config.yaml /app/backend/api/config/config.yaml
 WORKDIR /app/backend
+
+# Install Python dependencies
+COPY backend/requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
+
+# Continue with the rest of the Dockerfile
+
+# Verify the installation
+RUN pip show httpx
+
 RUN poetry install
 
 
