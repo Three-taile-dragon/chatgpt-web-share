@@ -4,34 +4,34 @@ RUN apk add --no-cache git
 
 RUN go install github.com/acheong08/ChatGPT-Proxy-V4@latest
 
-FROM python:3.10-alpine
+# 新的构建阶段：构建前端
+FROM node:16-alpine AS FrontendBuilder
 
-# 安装 nodejs 和 pnpm
-RUN apk add --no-cache nodejs npm
 RUN npm install -g pnpm
 
-# 构建前端
 COPY frontend /app/frontend
 WORKDIR /app/frontend
 RUN pnpm install
 RUN pnpm run build
 
-# 安装 poetry
+FROM python:3.10-alpine
+
 RUN apk add --no-cache curl
 RUN curl -sSL https://install.python-poetry.org | python -
 
-# 配置后端
 COPY backend /app/backend
 COPY config.yaml /app/backend/api/config/config.yaml
 WORKDIR /app/backend
 RUN poetry install
 
 COPY Caddyfile /app/Caddyfile
-COPY frontend/dist /app/dist
+
+# 从 FrontendBuilder 阶段复制生成的 dist 目录
+COPY --from=FrontendBuilder /app/frontend/dist /app/dist
+
 COPY --from=ProxyBuilder /go/bin/ChatGPT-Proxy-V4 /app/backend/ChatGPT-Proxy-V4
 COPY backend /app/backend
 
-# 安装 caddy
 RUN apk add --no-cache caddy
 
 WORKDIR /app
