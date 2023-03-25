@@ -14,8 +14,8 @@ create_initial_admin_user: true # 是否创建初始管理员用户
 create_initial_user: true # 是否创建初始普通用户
 initial_admin_username: "{{ uinitial_admin_username }}" # 初始管理员用户名
 initial_admin_password: "{{ uinitial_admin_password }}" # 初始管理员密码
-initial_user_username: "{{ uinitial_user_username }}" # 初始普通用户名
-initial_user_password: "{{ uinitial_user_password }}" # 初始普通密码
+initial_user_username: "{{ initial_user_username }}" # 初始普通用户名
+initial_user_password: "{{ initial_user_password }}" # 初始普通密码
 ask_timeout: 600
 
 chatgpt_access_token: "{{ uchatgpt_access_token }}" # 需要从 ChatGPT 获取
