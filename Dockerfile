@@ -1,4 +1,4 @@
-FROM golang:1.17-alpine AS ProxyBuilder
+FROM golang:1.18-alpine AS ProxyBuilder
 
 RUN apk add --no-cache git
 
