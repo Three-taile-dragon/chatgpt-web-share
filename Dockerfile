@@ -1,28 +1,38 @@
 FROM golang:1.17-alpine AS ProxyBuilder
 
-# 安装 git
 RUN apk add --no-cache git
 
-# 安装 ChatGPT-Proxy-V4
 RUN go install github.com/acheong08/ChatGPT-Proxy-V4@latest
 
 FROM python:3.10-alpine
 
-ARG PIP_CACHE_DIR=/pip_cache
+# 安装 nodejs 和 pnpm
+RUN apk add --no-cache nodejs npm
+RUN npm install -g pnpm
 
-RUN mkdir -p /app/backend
+# 构建前端
+COPY frontend /app/frontend
+WORKDIR /app/frontend
+RUN pnpm install
+RUN pnpm run build
 
-RUN apk add --no-cache caddy
+# 安装 poetry
+RUN apk add --no-cache curl
+RUN curl -sSL https://install.python-poetry.org | python -
 
-COPY backend/requirements.txt /tmp/requirements.txt
-RUN pip install --no-cache-dir -r /tmp/requirements.txt
+# 配置后端
+COPY backend /app/backend
+COPY config.yaml /app/backend/api/config/config.yaml
+WORKDIR /app/backend
+RUN poetry install
 
 COPY Caddyfile /app/Caddyfile
-COPY backend /app/backend
 COPY frontend/dist /app/dist
-
-# 从 ProxyBuilder 阶段复制二进制文件
 COPY --from=ProxyBuilder /go/bin/ChatGPT-Proxy-V4 /app/backend/ChatGPT-Proxy-V4
+COPY backend /app/backend
+
+# 安装 caddy
+RUN apk add --no-cache caddy
 
 WORKDIR /app
 
