@@ -16,6 +16,7 @@ class Config:
                 shutil.copyfile(config_file + ".template", config_file)
         with open(config_file, 'r') as f:
             self.config = yaml.load(f, Loader=Loader)
+        self.apply_replacements()
 
     def get(self, key, default=None):
         return self.config.get(key, default)
@@ -26,6 +27,8 @@ class Config:
     def save(self, config_file):
         with open(config_file, 'w') as f:
             yaml.dump(self.config, f)
+    def apply_replacements(self):
+        self.config = replace_env_variables(self.config)
 
 def replace_env_variables(config):
     for key, value in config.items():
@@ -35,8 +38,6 @@ def replace_env_variables(config):
             config[key] = replace_env_variables(value)
     return config
             
-            
-           
 config_file = os.path.join(os.path.dirname(__file__), "config.yaml")
 config = Config(config_file)
-config = replace_env_variables(config)
+
