@@ -18,6 +18,7 @@ FROM python:3.10-alpine
 
 RUN apk add --no-cache curl
 RUN curl -sSL https://install.python-poetry.org | python -
+ENV PATH="/root/.local/bin:${PATH}"
 
 COPY backend /app/backend
 COPY config.yaml /app/backend/api/config/config.yaml
