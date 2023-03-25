@@ -20,10 +20,14 @@ RUN apk add --no-cache curl
 RUN curl -sSL https://install.python-poetry.org | python -
 ENV PATH="/root/.local/bin:${PATH}"
 
+# Install docker-compose
+RUN apk add --no-cache docker-compose
+
 COPY backend /app/backend
 COPY config.yaml /app/backend/api/config/config.yaml
 WORKDIR /app/backend
 RUN poetry install
+
 
 COPY Caddyfile /app/Caddyfile
 
