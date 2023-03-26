@@ -33,10 +33,11 @@ class Config:
 def replace_env_variables(config):
     for key, value in config.items():
         if isinstance(value, str):
-            config[key] = value.replace('{{', '{').replace('}}', '}').format(**os.environ)
+            config[key] = value.replace('{{', '{').replace('}}', '}').format(**{k: os.environ.get(k, '') for k in os.environ})
         elif isinstance(value, dict):
             config[key] = replace_env_variables(value)
     return config
+
             
 config_file = os.path.join(os.path.dirname(__file__), "config.yaml")
 config = Config(config_file)
