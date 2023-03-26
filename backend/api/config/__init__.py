@@ -1,6 +1,7 @@
 import os
 import shutil
 import yaml
+import re
 
 try:
     from yaml import CLoader as Loader, CDumper as Dumper
@@ -33,7 +34,12 @@ class Config:
 def replace_env_variables(config):
     for key, value in config.items():
         if isinstance(value, str):
-            config[key] = value.replace('{{', '{').replace('}}', '}').format(**{k: os.environ.get(k, '') for k in os.environ})
+            matches = re.findall(r'{{\s*([\w\d_]+)\s*}}', value)
+            if matches:
+                for match in matches:
+                    env_value = os.environ.get(match, '')
+                    value = value.replace('{{' + match + '}}', env_value)
+                config[key] = value
         elif isinstance(value, dict):
             config[key] = replace_env_variables(value)
     return config
