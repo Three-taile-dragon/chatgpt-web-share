@@ -4,21 +4,21 @@ port: 8000
 database_url: "sqlite+aiosqlite:////data/database.db"
 run_migration: false
 
-jwt_secret: "{{ ujwt_secret }}" # 用于生成 jwt token，需要自行设置
+jwt_secret: "{{ UJWT_SECRET }}" # 用于生成 jwt token，需要自行设置
 jwt_lifetime_seconds: 86400
 cookie_max_age: 86400 # 登录过期时间
-user_secret: "{{ uuser_secret }}" # 用于生成用户密码，需要自行设置
+user_secret: "{{ UUSER_SECRET }}" # 用于生成用户密码，需要自行设置
 
 sync_conversations_on_startup: true # 是否在启动时同步同步 ChatGPT 对话，建议启用
 create_initial_admin_user: true # 是否创建初始管理员用户
 create_initial_user: true # 是否创建初始普通用户
-initial_admin_username: "{{ uinitial_admin_username }}" # 初始管理员用户名
-initial_admin_password: "{{ uinitial_admin_password }}" # 初始管理员密码
-initial_user_username: "{{ initial_user_username }}" # 初始普通用户名
-initial_user_password: "{{ initial_user_password }}" # 初始普通密码
+initial_admin_username: "{{ UINITIAL_ADMIN_USERNAME }}" # 初始管理员用户名
+initial_admin_password: "{{ UINITIAL_ADMIN_PASSWORD }}" # 初始管理员密码
+initial_user_username: "{{ UINITIAL_USER_USERNAME }}" # 初始普通用户名
+initial_user_password: "{{ UINITIAL_USER_PASSWORD }}" # 初始普通密码
 ask_timeout: 600
 
-chatgpt_access_token: "{{ uchatgpt_access_token }}" # 需要从 ChatGPT 获取
+chatgpt_access_token: "{{ UCHATGPT_ACCESS_TOKEN }}" # 需要从 ChatGPT 获取
 chatgpt_paid: true # 是否为 ChatGPT Plus 用户
 
 log_dir: /app/logs  # 日志存储位置
@@ -28,4 +28,4 @@ chatgpt_base_url: http://127.0.0.1:6062/api/
 run_reverse_proxy: true
 reverse_proxy_port: 6062
 reverse_proxy_binary_path: /app/backend/ChatGPT-Proxy-V4
-reverse_proxy_puid: "{{ ureverse_proxy_puid }}"
+reverse_proxy_puid: "{{ UREVERSE_PROXY_PUID }}"
