@@ -24,8 +24,9 @@ chatgpt_paid: true # 是否为 ChatGPT Plus 用户
 log_dir: /app/logs  # 日志存储位置
 console_log_level: DEBUG
 
-chatgpt_base_url: http://127.0.0.1:6062/api/
-run_reverse_proxy: true
+# chatgpt_base_url: http://127.0.0.1:6062/api/
+chatgpt_base_url: https://aabb.co.in/api
+run_reverse_proxy: false
 reverse_proxy_port: 6062
 reverse_proxy_binary_path: /app/backend/ChatGPT-Proxy-V4
 # reverse_proxy_puid: "{{ ureverse_proxy_puid }}"
